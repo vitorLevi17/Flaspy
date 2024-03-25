@@ -15,9 +15,9 @@ class Usuario:
 app = Flask(__name__)
 app.secret_key = 'alurar'
 
-us = Usuario('Bagio','rob',12345)
-us1 = Usuario('Materazzi','zidsis',123456)
-us2 = Usuario('Bio','r',1234567)
+us = Usuario('Bagio','rob',"12345")
+us1 = Usuario('Materazzi','zidsis',"123456")
+us2 = Usuario('Bio','r',"1234567")
 users = {us.nick: us, us1.nick: us1, us2.nick: us2}
 
 
@@ -46,9 +46,9 @@ def autenticar():
             flash(session['usuario_logado'] + ' logado com sucesso!')
             proxima_pagina = request.form['proxima']
             return redirect(proxima_pagina)
-
-    flash('Credenciais inválidas. Tente novamente.')
-    return redirect(url_for('login'))
+    else:
+        flash('Credenciais inválidas. Tente novamente.')
+        return redirect(url_for('login'))
 @app.route('/logout')
 def logout():
     session['usuario_logado'] = None
