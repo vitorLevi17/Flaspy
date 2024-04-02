@@ -1,6 +1,8 @@
-from flask import render_template,request, redirect, session, flash, url_for
-from models import Jogos , Usuarios
+from ajudas import recupera_img,excluir_img
+from flask import render_template,request, redirect, session, flash, url_for, send_from_directory
+from models import Jogos, Usuarios
 from jogo import app,db
+
 @app.route('/')
 def inicio():
     lista_games = Jogos.query.order_by(Jogos.id)
@@ -43,6 +45,7 @@ def criar():
     categoria = request.form['categoria']
     console = request.form['console']
 
+
     jogo = Jogos.query.filter_by(nome = nome).first()
     if jogo:
         flash("O jogo já é existente!")
@@ -50,6 +53,10 @@ def criar():
     new_game = Jogos(nome = nome,categoria = categoria,console = console)
     db.session.add(new_game)
     db.session.commit()
+
+    arquivo = request.files['arquivo']
+    upload_path = app.config['UPLOAD_PATH']
+    arquivo.save(f'{upload_path}/{new_game.id}.jpg')
 
     return redirect(url_for('inicio'))
 
@@ -59,7 +66,8 @@ def editar(id):
         return redirect(url_for('login',proxima=url_for('editar')))
     jogo = Jogos.query.filter_by(id=id).first()
     tituloo = "Editar jogo"
-    return render_template("editar.html",titulo=tituloo,jogo = jogo)
+    capa_jogo = recupera_img(id)
+    return render_template("editar.html",titulo=tituloo,jogo = jogo, capa_jogo = capa_jogo)
 
 @app.route('/atualizaar',methods=['POST'])
 def atualizar():
@@ -71,6 +79,11 @@ def atualizar():
 
     db.session.add(jogo)
     db.session.commit()
+
+    arquivo = request.files['arquivo']
+    upload_path = app.config['UPLOAD_PATH']
+    excluir_img(jogo.id)
+    arquivo.save(f'{upload_path}/{jogo.id}.jpg')
 
     return redirect(url_for('inicio'))
 
@@ -85,3 +98,8 @@ def excluir(id):
     flash('Jogo deletado com sucesso')
 
     return redirect(url_for('inicio'))
+
+@app.route('/fotos/<nome>')
+def imagem(nome):
+    return send_from_directory('fotos',nome)
+
