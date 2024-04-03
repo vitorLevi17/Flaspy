@@ -9,8 +9,6 @@
   <body>
     <div class="container">
 
-
-
 {% with messages = get_flashed_messages() %}
             {% if messages %}
                 <ul id="messages" class="list-unstyled">
@@ -22,15 +20,14 @@
         {% endwith %}
 
 
-
-
         <h1>Faça seu login</h1>
         <form method="POST" action="{{url_for('autenticar')}}">
-            <input type="hidden" name="proxima" value="{{proxima}}">
+            <input type="hidden" name="proxima" value="{{proxima or url_for('inicio')}}">
             <p><label>Nome de usuário:</label> <input class="form-control" type="text" name="usuario" required></p>
             <p><label>Senha:</label> <input class="form-control" type="password" name="senha" required></p>
             <p><button class="btn btn-primary" type="submit">Entrar</button></p>
         </form>
+        <a class="btn btn-danger" href="{{url_for('inicio')}}">Voltar</a>
     </div>
 </body>
 </html>

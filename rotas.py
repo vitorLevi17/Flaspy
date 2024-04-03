@@ -1,4 +1,4 @@
-from ajudas import recupera_img,excluir_img
+from ajudas import recupera_img,excluir_img, FormularioJogo
 from flask import render_template,request, redirect, session, flash, url_for, send_from_directory
 from models import Jogos, Usuarios
 from jogo import app,db
@@ -37,13 +37,20 @@ def cadastrarJogo():
         return redirect(url_for('login',proxima=url_for('cadastrarJogo')))
     else:
         tituloo = "Cadastre seus Jogos favoritos"
-        return render_template("cadastrarJogo.html",titulo=tituloo)
+        form = FormularioJogo()
+        return render_template("cadastrarJogo.html",titulo=tituloo, form = form)
 
 @app.route('/criar',methods=['POST'])
 def criar():
-    nome = request.form['nome']
-    categoria = request.form['categoria']
-    console = request.form['console']
+    form = FormularioJogo(request.form)
+
+    if not form.validate_on_submit():
+        return redirect(url_for('cadastrarJogo'))
+
+
+    nome = form.nome.data
+    categoria = form.categoria.data
+    console = form.console.data
 
 
     jogo = Jogos.query.filter_by(nome = nome).first()

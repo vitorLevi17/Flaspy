@@ -2,6 +2,7 @@
 {% block conteudo %}
       <form action="{{ url_for('criar') }}" METHOD="POST" ENCTYPE="multipart/form-data">
 
+        {{ form.csrf_token }}
       <figure class="img-thumbnail-col-md-4">
         <img class="img-fluid" src="{{url_for('imagem',nome='Capa.jpg')}}">
           <figcaption>
@@ -14,19 +15,26 @@
 
 
         <fieldset>
+
           <div class="form-group">
-            <label for="nome">Nome</label>
-            <input type="text" id="nome" name="nome" class="form-control">
+            {{ form.nome.label(class = "form-label") }}
+            {{ form.nome(class = "form-control") }}
           </div>
+
           <div class="form-group">
-            <label for="categoria">Categoria</label>
-            <input type="text" id="categoria" name="categoria" class="form-control">
+            {{ form.categoria.label(class = "form-label") }}
+            {{ form.categoria(class = "form-control") }}
           </div>
+
           <div class="form-group">
-            <label for="console">Console</label>
-            <input type="text" id="console" name="console" class="form-control">
+            {{ form.console.label(class = "form-label") }}
+            {{ form.console(class = "form-control") }}
           </div>
-          <button type="submit" class="btn btn-primary btn-salvar">Salvar</button>
+
+          <div>
+            {{form.salvar(class = "btn btn-primary")}}
+          </div>
+          <a class="btn btn-danger" href="{{url_for('inicio')}}">Voltar</a>
         </fieldset>
       </form>
 {% endblock %}
