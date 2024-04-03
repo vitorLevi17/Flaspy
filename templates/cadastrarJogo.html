@@ -33,8 +33,9 @@
 
           <div>
             {{form.salvar(class = "btn btn-primary")}}
+            <a class="btn btn-danger" href="{{url_for('inicio')}}">Voltar</a>
           </div>
-          <a class="btn btn-danger" href="{{url_for('inicio')}}">Voltar</a>
+
         </fieldset>
       </form>
 {% endblock %}
