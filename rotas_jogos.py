@@ -1,6 +1,6 @@
-from ajudas import recupera_img,excluir_img, FormularioJogo, FormularioUsuario
+from ajudas import recupera_img,excluir_img, FormularioJogo
 from flask import render_template,request, redirect, session, flash, url_for, send_from_directory
-from models import Jogos, Usuarios
+from models import Jogos
 from jogo import app,db
 
 @app.route('/')
@@ -8,31 +8,6 @@ def inicio():
     lista_games = Jogos.query.order_by(Jogos.id)
     return render_template("inicio.html",titulo = "Games",jogos=lista_games)
 
-@app.route('/login')
-def login():
-    form = FormularioUsuario(request.form)
-    proxima = request.args.get('proxima')
-    return render_template('login.html', proxima=proxima, form=form)
-
-@app.route('/autenticar', methods=['POST',])
-def autenticar():
-    form = FormularioUsuario(request.form)
-    usuario = Usuarios.query.filter_by(nick = form.nick.data).first()
-    if usuario:
-        if form.senha.data == usuario.senha:
-            session['usuario_logado'] = usuario.nick
-            flash(usuario.nick + ' logado com sucesso!')
-            proxima_pagina = request.form['proxima']
-            return redirect(proxima_pagina)
-    else:
-        flash('Usuário não logado.')
-        return redirect(url_for('login'))
-
-@app.route('/logout')
-def logout():
-    session['usuario_logado'] = None
-    flash("Logout feito")
-    return redirect(url_for('inicio'))
 @app.route('/NovoJogo')
 def cadastrarJogo():
     if 'usuario_logado' not in session or session['usuario_logado'] == None:

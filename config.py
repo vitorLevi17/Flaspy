@@ -1,5 +1,5 @@
 import os
-from Flaspy.jogo import app
+from jogo import app
 
 SECRET_KEY = 'alurar'
 
