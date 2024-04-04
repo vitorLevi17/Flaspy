@@ -44,7 +44,7 @@ TABLES['Jogos'] = ('''
 TABLES['Usuarios'] = ('''
     CREATE TABLE `jogoteca`.`usuarios` (
       `nome` VARCHAR(50) NOT NULL,
-      `nickname` VARCHAR(10) NOT NULL,
+      `nick` VARCHAR(10) NOT NULL,
       `senha` VARCHAR(100) NOT NULL,
       PRIMARY KEY (`nickname`))
     ENGINE = InnoDB
